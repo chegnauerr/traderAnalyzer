@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>TV Analyzer</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- Header -->
+  <header class="header">
+    <div class="logo">
+      <span class="logo-icon">◈</span>
+      <span class="logo-text">TV Analyzer</span>
+    </div>
+    <div class="header-right">
+      <div class="hdr-pt-bal" id="hdrPtBal" title="Balance demo">$10,000</div>
+      <label class="btn-ml-hdr" id="mlHdrBtn" title="Importar model_weights.json (modelo ML entrenado)">
+        🤖 <span id="mlHdrStatus">Sin ML</span>
+        <input type="file" id="mlFileInput" accept=".json" style="display:none">
+      </label>
+      <button class="btn-auto-refresh" id="autoRefreshBtn" title="Auto-refresh 30s">⟳ Auto</button>
+    </div>
+  </header>
+
+  <!-- Sync bar -->
+  <div class="sync-bar" id="syncBar">
+    <span class="sync-dot" id="syncDot">●</span>
+    <span class="sync-label" id="syncLabel">Sin sincronizar</span>
+    <button class="btn-sync" id="syncBtn">⟳ Sincronizar TV</button>
+  </div>
+
+  <!-- Symbol bar -->
+  <div class="sym-bar">
+    <input type="text" id="symInput" class="sym-input" value="BTCUSDT" placeholder="BTCUSDT…" spellcheck="false" />
+    <select id="tfSelect" class="tf-select">
+      <option value="1m">1m</option>
+      <option value="5m">5m</option>
+      <option value="15m" selected>15m</option>
+      <option value="30m">30m</option>
+      <option value="1h">1h</option>
+      <option value="4h">4h</option>
+      <option value="1d">1d</option>
+      <option value="1w">1w</option>
+    </select>
+    <button class="btn-analyze" id="analyzeBtn">▶ Analizar</button>
+  </div>
+
+  <!-- Tabs -->
+  <nav class="tabs">
+    <button class="tab active" data-tab="analysis">Análisis</button>
+    <button class="tab" data-tab="demo">Demo</button>
+    <button class="tab" data-tab="watchlist">Watchlist</button>
+    <button class="tab" data-tab="patrones">📐 Patrones</button>
+    <button class="tab" data-tab="neural-lab">🧠 Neural Lab</button>
+    <button class="tab" data-tab="whale-tracker">🐋 Whale Tracker</button>
+  </nav>
+
+  <!-- ===== ANÁLISIS ===== -->
+  <div class="tab-content active" id="tab-analysis">
+
+    <!-- Loading -->
+    <div class="a-loading" id="aLoading">
+      <div class="a-loading-spinner">⟳</div>
+      <div class="a-loading-text" id="aLoadingText">Descargando datos…</div>
+    </div>
+
+    <!-- Error -->
+    <div class="a-error" id="aError" style="display:none"></div>
+
+    <!-- Content -->
+    <div id="aContent" style="display:none">
+
+      <!-- Top bar: symbol · price · score -->
+      <div class="a-top-bar">
+        <div class="a-sym-row">
+          <span class="a-symbol" id="aSymbol">BTCUSDT</span>
+          <span class="a-tf" id="aTf">15m</span>
+          <span class="a-price" id="aPrice">—</span>
+          <span class="a-update" id="aLastUpdate"></span>
+        </div>
+        <div class="a-score-row">
+          <span class="a-score-num" id="aScore">50</span>
+          <div class="a-score-bar-wrap">
+            <div class="a-score-bar" id="aScoreBar"></div>
+          </div>
+          <span class="a-signal" id="aSignal">NEUTRAL</span>
+        </div>
+      </div>
+
+      <!-- Sessions — always-visible status bar + collapsible detail -->
+      <div class="sn-statusbar" id="snStatusBar">
+        <div class="sn-sb-sessions" id="snSbSessions">
+          <span class="sn-sb-loading">Cargando sesiones…</span>
+        </div>
+        <button class="btn-sn-toggle" id="snToggleBtn" title="Ver detalle + Calendario">▾</button>
+      </div>
+      <div class="sn-dropdown" id="snDropdown" style="display:none">
+        <div id="aSessionsNews"></div>
+      </div>
+
+      <!-- Trading Brain -->
+      <div class="a-section">
+        <div class="a-sec-title">🧠 Trading Brain</div>
+        <div id="aBrain"></div>
+      </div>
+
+      <!-- Verdict / Projection -->
+      <div class="a-section">
+        <div class="a-sec-title">🔮 Veredicto & Proyección</div>
+        <div id="aVerdict"></div>
+      </div>
+
+      <!-- Trend / Market structure -->
+      <div class="a-section">
+        <div class="a-sec-title">📈 Estructura de Mercado</div>
+        <div id="aTrend"></div>
+      </div>
+
+      <!-- Indicators -->
+      <div class="a-section">
+        <div class="a-sec-title">⚡ Indicadores Técnicos</div>
+        <div id="aIndicators"></div>
+      </div>
+
+      <!-- Chart Patterns -->
+      <div class="a-section">
+        <div class="a-sec-title">🔷 Patrones de Chart</div>
+        <div id="aPatterns"></div>
+      </div>
+
+      <!-- SMC -->
+      <div class="a-section">
+        <div class="a-sec-title">🧠 Smart Money Concepts</div>
+        <div id="aSMC"></div>
+      </div>
+
+      <!-- Signals breakdown -->
+      <div class="a-section">
+        <div class="a-sec-title">📊 Señales detectadas</div>
+        <div id="aSignals"></div>
+      </div>
+
+      <!-- Key levels & R:R -->
+      <div class="a-section">
+        <div class="a-sec-title-row">
+          <span class="a-sec-title">🎯 Niveles clave & Risk:Reward</span>
+          <button class="btn-draw-tv" id="drawLevelsBtn" title="Dibujar niveles en el gráfico de TradingView">📐 Dibujar en TV</button>
+        </div>
+        <div id="aLevels"></div>
+      </div>
+
+      <!-- Volume -->
+      <div class="a-section">
+        <div class="a-sec-title">📦 Volumen</div>
+        <div id="aVolume"></div>
+      </div>
+
+    </div><!-- #aContent -->
+  </div><!-- tab-analysis -->
+
+  <!-- ===== DEMO ===== -->
+  <div class="tab-content" id="tab-demo">
+
+    <!-- ── Account header ──────────────────────────────── -->
+    <div class="d-account">
+      <div class="d-account-top">
+        <div class="d-account-left">
+          <div class="d-account-lbl">BALANCE DISPONIBLE</div>
+          <div class="d-account-bal"><span id="dBalMain">$10,000.00</span></div>
+        </div>
+        <div class="d-account-right">
+          <div class="d-account-equity-lbl">EQUITY TOTAL</div>
+          <div class="d-account-equity" id="dEquity">$10,000.00</div>
+          <div class="d-account-pnl" id="dTotalPnl"></div>
+        </div>
+      </div>
+      <div class="d-stats-row" id="dStats"></div>
+      <div class="d-account-actions">
+        <select class="d-start-sel" id="dStartBal">
+          <option value="1000">$1,000</option>
+          <option value="5000">$5,000</option>
+          <option value="10000" selected>$10,000</option>
+          <option value="50000">$50,000</option>
+        </select>
+        <button class="btn-d-new" id="dResetBtn">↺ Nueva demo</button>
+        <button class="btn-d-export" id="dExportBtn">↓ JSON</button>
+      </div>
+    </div>
+
+    <!-- ── Quick trade panel ────────────────────────────── -->
+    <div class="d-trade-panel">
+      <div class="d-tp-header">
+        <span class="d-tp-title">FUTUROS DEMO</span>
+        <span class="d-tp-symbol" id="dTpSymbol">BTCUSDT</span>
+        <span class="d-tp-price" id="dTpPrice">—</span>
+        <span class="d-tp-mode">PERP · Isolated</span>
+      </div>
+      <div class="d-tp-body">
+
+        <!-- Row 1: Margen + Apalancamiento -->
+        <div class="d-tp-row">
+          <div class="d-tp-field d-tp-field-lg">
+            <label class="d-tp-lbl">Margen (USD)</label>
+            <input type="number" id="dTpAmount" class="d-tp-input" value="100" min="1" step="50" />
+          </div>
+          <div class="d-tp-field">
+            <label class="d-tp-lbl">Apalancamiento</label>
+            <select id="dTpLev" class="d-tp-sel">
+              <option value="1">1x</option>
+              <option value="2">2x</option>
+              <option value="3">3x</option>
+              <option value="5">5x</option>
+              <option value="10" selected>10x</option>
+              <option value="20">20x</option>
+              <option value="25">25x</option>
+              <option value="50">50x</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Row 2: TP / SL -->
+        <div class="d-tp-row">
+          <div class="d-tp-field">
+            <label class="d-tp-lbl">Take Profit %</label>
+            <input type="number" id="dTpTp" class="d-tp-input" value="30" min="1" max="500" />
+          </div>
+          <div class="d-tp-field">
+            <label class="d-tp-lbl">Stop Loss %</label>
+            <input type="number" id="dTpSl" class="d-tp-input" value="15" min="1" max="80" />
+          </div>
+        </div>
+
+        <!-- Order summary -->
+        <div class="d-tp-summary" id="dTpInfo"></div>
+
+        <!-- Buttons -->
+        <div class="d-tp-buttons">
+          <button class="btn-d-long"  id="btnDemoLong">▲ LONG</button>
+          <button class="btn-d-short" id="btnDemoShort">▼ SHORT</button>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ── Open positions ───────────────────────────────── -->
+    <div class="d-sec-hdr">
+      <span class="d-sec-title">Posiciones abiertas</span>
+      <span class="d-sec-count" id="dOpenCount"></span>
+    </div>
+    <div id="dOpenList">
+      <div class="d-empty">Sin posiciones — abre un LONG o SHORT arriba</div>
+    </div>
+
+    <!-- ── History ──────────────────────────────────────── -->
+    <div class="d-sec-hdr">
+      <span class="d-sec-title">Historial de trades</span>
+      <span class="d-sec-count" id="dHistCount"></span>
+    </div>
+    <div id="dHistList">
+      <div class="d-empty">Sin trades cerrados aún</div>
+    </div>
+
+  </div><!-- tab-demo -->
+
+  <!-- ===== WATCHLIST ===== -->
+  <div class="tab-content" id="tab-watchlist">
+    <div class="wl-add-row">
+      <input type="text" id="wlInput" class="wl-input" placeholder="SOLUSDT…" spellcheck="false" />
+      <button class="btn-wl-add" id="wlAddBtn">+ Añadir</button>
+    </div>
+    <div class="wl-header-row">
+      <span class="wl-h wl-h-sym">Par</span>
+      <span class="wl-h wl-h-price">Precio</span>
+      <span class="wl-h wl-h-chg">24h</span>
+      <span class="wl-h wl-h-vol">Vol</span>
+      <span class="wl-h"></span>
+    </div>
+    <div id="watchList"></div>
+  </div>
+
+  <!-- ===== PATRONES ARMÓNICOS ===== -->
+  <div class="tab-content" id="tab-patrones">
+
+    <div class="pt-sec-hdr">
+      <span class="pt-sec-title">Detectados ahora</span>
+      <span class="pt-sec-sub" id="ptDetectedSub">analiza un par primero</span>
+    </div>
+    <div id="ptDetectedList" class="pt-detected-wrap">
+      <div class="pt-empty">Pulsa ▶ Analizar para ver patrones del mercado actual</div>
+    </div>
+
+    <div class="pt-sec-hdr" style="margin-top:8px">
+      <span class="pt-sec-title">📚 Biblioteca de Patrones</span>
+    </div>
+    <div id="ptLibrary" class="pt-library"></div>
+
+    <div class="pt-sec-hdr" style="margin-top:8px">
+      <span class="pt-sec-title">🎓 Conceptos Clave</span>
+    </div>
+    <div class="pt-concepts" id="ptConcepts"></div>
+
+  </div><!-- tab-patrones -->
+
+  <!-- ===== NEURAL LAB ===== -->
+  <div class="tab-content nl-tab-root" id="tab-neural-lab">
+
+    <!-- Header -->
+    <div class="nl-header">
+      <div class="nl-header-top">
+        <div class="nl-logo">
+          <span class="nl-logo-icon">◈</span>
+          <span class="nl-logo-text">STARK-OS</span>
+          <span class="nl-logo-sub">Neural Lab v1.0</span>
+        </div>
+        <div class="nl-header-badges">
+          <span class="nl-badge nl-badge-live" id="nlStatusBadge">● IDLE</span>
+        </div>
+      </div>
+      <div class="nl-scan-row">
+        <div class="nl-scan-left">
+          <label class="nl-input-lbl">Par</label>
+          <input type="text" id="nlSymbolInput" class="nl-sym-input" value="BTCUSDT" spellcheck="false" />
+        </div>
+        <div class="nl-scan-left">
+          <label class="nl-input-lbl">Rango BTC</label>
+          <div class="nl-range-row">
+            <input type="number" id="nlMinBtc" class="nl-mini-input" value="1" min="0.1" step="0.1" />
+            <span class="nl-range-sep">–</span>
+            <input type="number" id="nlMaxBtc" class="nl-mini-input" value="10" min="1" step="1" />
+          </div>
+        </div>
+        <button class="btn-nl-scan" id="nlScanBtn">🎯 Escanear Ballenas</button>
+      </div>
+    </div>
+
+    <!-- Scrollable body -->
+    <div class="nl-scroll-body" id="nlScrollBody">
+
+      <!-- Hunter Results -->
+      <div class="nl-section">
+        <div class="nl-sec-hdr">
+          <span class="nl-sec-title">🐋 Hunter Agent — Señales Activas</span>
+          <span class="nl-sec-sub" id="nlScanSub">Pulsa Escanear para iniciar</span>
+        </div>
+
+        <!-- Loading state -->
+        <div class="nl-loading" id="nlLoading" style="display:none">
+          <div class="nl-spin">⟳</div>
+          <span id="nlLoadingText">Escaneando aggTrades…</span>
+        </div>
+
+        <!-- Error state -->
+        <div class="nl-error" id="nlError" style="display:none"></div>
+
+        <!-- Signals table -->
+        <div id="nlSignalsWrap">
+          <div class="nl-empty-state" id="nlEmptyState">
+            <div class="nl-empty-icon">🔍</div>
+            <div class="nl-empty-msg">Sin señales aún — pulsa Escanear</div>
+            <div class="nl-empty-sub">El Hunter filtrará solo confluencias con win-rate > 70%</div>
+          </div>
+          <table class="nl-table" id="nlSignalsTable" style="display:none">
+            <thead>
+              <tr>
+                <th>Par</th>
+                <th>Dirección</th>
+                <th>Win-Rate</th>
+                <th>Entrada</th>
+                <th>TP</th>
+                <th>SL</th>
+                <th>R:R</th>
+                <th>Conf.</th>
+                <th>Tiempo</th>
+              </tr>
+            </thead>
+            <tbody id="nlSignalsTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Whale Activity -->
+      <div class="nl-section" id="nlWhaleSection" style="display:none">
+        <div class="nl-sec-hdr">
+          <span class="nl-sec-title">🐳 Actividad de Ballenas Detectada</span>
+          <span class="nl-sec-sub" id="nlWhaleSub"></span>
+        </div>
+        <div class="nl-whale-stats" id="nlWhaleStats"></div>
+        <table class="nl-table nl-table-whale" id="nlWhaleTable">
+          <thead>
+            <tr>
+              <th>Tipo</th>
+              <th>BTC</th>
+              <th>USD</th>
+              <th>Lado</th>
+              <th>Hora</th>
+              <th>Agentes</th>
+            </tr>
+          </thead>
+          <tbody id="nlWhaleTbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Signal History -->
+      <div class="nl-section">
+        <div class="nl-sec-hdr">
+          <span class="nl-sec-title">📋 Historial de Señales</span>
+          <button class="btn-nl-clear" id="nlClearHistBtn">Limpiar</button>
+        </div>
+        <div id="nlHistoryWrap">
+          <div class="nl-empty-state nl-hist-empty" id="nlHistEmpty">
+            <div class="nl-empty-icon">📭</div>
+            <div class="nl-empty-msg">Sin historial guardado</div>
+          </div>
+          <table class="nl-table nl-table-hist" id="nlHistTable" style="display:none">
+            <thead>
+              <tr>
+                <th>Par</th>
+                <th>Dir.</th>
+                <th>WR%</th>
+                <th>Entrada</th>
+                <th>R:R</th>
+                <th>Fecha</th>
+              </tr>
+            </thead>
+            <tbody id="nlHistTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Backtest Slot (ahora activo via Scientist Agent) -->
+      <div class="nl-section nl-backtest-slot" id="nlBacktestSlot">
+        <div class="nl-sec-hdr">
+          <span class="nl-sec-title">🔬 Backtesting Snapshot</span>
+          <span class="nl-badge" style="background:rgba(0,255,65,.08);color:#00ff41;border-color:rgba(0,255,65,.3)">● ACTIVO</span>
+        </div>
+        <div class="nl-backtest-placeholder">
+          <div class="nl-bt-icon">📊</div>
+          <div class="nl-bt-msg">Pulsa 📊 BT en cualquier ballena para activar el Scientist</div>
+          <div class="nl-bt-sub">El SVG mini-chart se genera inline · Los patrones se guardan automáticamente</div>
+        </div>
+      </div>
+
+      <!-- Neural Pattern Library -->
+      <div class="nl-section nl-lib-section" id="nlPatternLibSection">
+        <div class="nl-sec-hdr">
+          <span class="nl-sec-title">🧬 Biblioteca de Patrones Neuronales</span>
+          <div style="display:flex;gap:5px;align-items:center">
+            <span class="nl-badge" id="nlPatternCount" style="background:rgba(0,212,255,.1);color:var(--accent);border-color:rgba(0,212,255,.3)">0 patrones</span>
+            <button class="btn-nl-clear" id="nlPruneBtn" title="Eliminar patrones < 50% WR">✂ Podar</button>
+          </div>
+        </div>
+
+        <!-- Architect alert banner (hidden until match) -->
+        <div class="nl-architect-alert" id="nlArchitectAlert" style="display:none">
+          <span class="nl-arch-icon">🎯</span>
+          <span class="nl-arch-msg" id="nlArchitectMsg"></span>
+          <button class="nl-arch-close" id="nlArchitectClose">✕</button>
+        </div>
+
+        <!-- Pattern list -->
+        <div id="nlPatternList">
+          <div class="nl-empty-state" id="nlPatternEmpty">
+            <div class="nl-empty-icon">🧬</div>
+            <div class="nl-empty-msg">Sin patrones guardados aún</div>
+            <div class="nl-empty-sub">El Scientist guarda NeuralPatterns cuando detecta WR ≥ 65%</div>
+          </div>
+          <table class="nl-table nl-table-patterns" id="nlPatternTable" style="display:none">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>MO</th>
+                <th>Dir.</th>
+                <th>WR%</th>
+                <th>R:R</th>
+                <th>Activaciones</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="nlPatternTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div><!-- .nl-scroll-body -->
+  </div><!-- tab-neural-lab -->
+
+</div><!-- .app -->
+
+<!-- ===== WHALE TRACKER TAB ===== -->
+<div class="tab-content wt-tab-root" id="tab-whale-tracker">
+  <div class="wt-header">
+    <div class="wt-header-top">
+      <span class="wt-logo">🐋 Whale Tracker</span>
+      <span class="wt-sub">Hyperliquid On-Chain · Wallets Reales</span>
+    </div>
+    <div class="wt-search-row">
+      <input type="text" id="wtAddressInput"
+        class="wt-address-input"
+        placeholder="0x... dirección de wallet Hyperliquid"
+        spellcheck="false" autocomplete="off"/>
+      <button class="btn-wt-analyze" id="wtAnalyzeBtn">🔬 Analizar</button>
+      <button class="btn-stark-wt" id="wtLeaderboardBtn">🏆 Top Vaults</button>
+    </div>
+    <div id="wtError" class="wt-error" style="display:none"></div>
+    <div id="wtLoading" class="wt-loading" style="display:none">
+      <span class="nl-spin">⟳</span> Consultando Hyperliquid API...
+    </div>
+  </div>
+
+  <div class="wt-scroll-body">
+
+    <!-- DNA Profile -->
+    <div id="wtDnaSection" style="display:none">
+      <div class="wt-section">
+        <div class="wt-sec-hdr">
+          <span class="wt-sec-title">🧬 ADN de la Billetera</span>
+          <span class="wt-address-badge" id="wtAddressBadge"></span>
+        </div>
+        <div class="wt-strategy-banner" id="wtStrategyBanner"></div>
+        <div class="wt-dna-grid" id="wtDnaGrid"></div>
+      </div>
+
+      <!-- Session heatmap -->
+      <div class="wt-section">
+        <div class="wt-sec-hdr"><span class="wt-sec-title">⏰ Sesiones de Trading</span></div>
+        <div class="wt-sessions" id="wtSessions"></div>
+      </div>
+
+      <!-- Current positions -->
+      <div class="wt-section" id="wtPositionsSection" style="display:none">
+        <div class="wt-sec-hdr"><span class="wt-sec-title">📊 Posiciones Abiertas Actuales</span></div>
+        <table class="wt-table" id="wtPositionsTable">
+          <thead><tr>
+            <th>Activo</th><th>Lado</th><th>Tamaño</th>
+            <th>Entrada</th><th>Leverage</th><th>PnL No Real.</th>
+          </tr></thead>
+          <tbody id="wtPositionsTbody"></tbody>
+        </table>
+      </div>
+
+      <!-- Recent fills -->
+      <div class="wt-section">
+        <div class="wt-sec-hdr">
+          <span class="wt-sec-title">📋 Últimos 20 Trades</span>
+          <span class="wt-sec-sub" id="wtFillsSub"></span>
+        </div>
+        <table class="wt-table" id="wtFillsTable">
+          <thead><tr>
+            <th>Activo</th><th>Lado</th><th>Precio</th>
+            <th>Cantidad</th><th>PnL</th><th>Hora</th>
+          </tr></thead>
+          <tbody id="wtFillsTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Leaderboard -->
+    <div id="wtLeaderboardSection" style="display:none">
+      <div class="wt-section">
+        <div class="wt-sec-hdr">
+          <span class="wt-sec-title">🏆 Top Ballenas Hyperliquid</span>
+          <span class="wt-sec-sub">Haz clic en una wallet para analizarla</span>
+        </div>
+        <table class="wt-table" id="wtLeaderTable">
+          <thead><tr>
+            <th>#</th><th>Wallet</th><th>PnL 7d</th><th>WR%</th><th>Volumen</th><th></th>
+          </tr></thead>
+          <tbody id="wtLeaderTbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Tracked wallets -->
+    <div class="wt-section" id="wtTrackedSection">
+      <div class="wt-sec-hdr">
+        <span class="wt-sec-title">📌 Wallets en Seguimiento</span>
+        <span class="wt-badge" id="wtTrackedCount">0</span>
+      </div>
+      <div id="wtTrackedEmpty" class="wt-empty">Analiza una wallet para añadirla al seguimiento</div>
+      <table class="wt-table" id="wtTrackedTable" style="display:none">
+        <thead><tr>
+          <th>Wallet</th><th>Estrategia</th><th>WR%</th><th>Trades</th><th></th>
+        </tr></thead>
+        <tbody id="wtTrackedTbody"></tbody>
+      </table>
+    </div>
+
+  </div><!-- .wt-scroll-body -->
+</div><!-- #tab-whale-tracker -->
+
+<!-- Pattern Modal -->
+<div class="pm-overlay" id="pmOverlay" style="display:none"></div>
+<div class="pm-modal" id="pmModal" style="display:none">
+  <div class="pm-close" id="pmClose">✕</div>
+  <div id="pmContent"></div>
+</div>
+
+<div class="notification" id="notification"></div>
+<script type="module" src="popup.js"></script>
+</body>
+</html>

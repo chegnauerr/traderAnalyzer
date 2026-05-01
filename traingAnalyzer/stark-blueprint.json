@@ -1,0 +1,51 @@
+{
+  "project": "STARK-OS-CORE",
+  "architecture": {
+    "type": "Hexagonal_Solid_Modular",
+    "enforce_rules": true,
+    "layers": {
+      "domain": "Entidades de Trading y Lógica de Red Neuronal LSTM",
+      "application": "Agentes Orquestadores: Hunter, Forensic, Scientist",
+      "infrastructure": "Adapters para Skills externas (CCXT, WhaleAlert, TA-Lib)"
+    }
+  },
+  "ui_module": {
+    "theme": "OLED_Dark",
+    "components": [
+      "Neural_Lab_Scroll",
+      "Backtest_Popup_Snapshot"
+    ],
+    "interaction": "Data-First (Minimalist)"
+  },
+  "skills_to_install": [
+    "https://github.com/ccxt/ccxt",
+    "https://github.com/whale-alert/whale-alert-js",
+    "https://github.com/anandanand84/technicalindicators"
+  ],
+  "constraints": {
+    "budget_base": 100,
+    "risk_per_trade_max": "10%",
+    "timeframe": "1m"
+  }
+}
+{
+  "evolution_step": "Refactor_to_Hexagonal_STARK",
+  "priority_actions": [
+    "Modularize_Monolith_4000_Lines",
+    "Implement_Hunter_Agent_Logic",
+    "Create_Neural_Lab_UI"
+  ],
+  "technical_mandates": {
+    "persistence": "chrome.storage.local",
+    "messaging": "ES_Modules_Native",
+    "risk_enforcement": "Strict_10_Percent_Rule"
+  },
+  "ui_update": {
+    "tab_id": "neural-lab",
+    "style": "Glassmorphism_OLED",
+    "features": [
+      "Vertical_Scroll",
+      "Backtest_Snapshots"
+    ]
+  }
+}
