@@ -1,0 +1,164 @@
+{
+  "1m": [
+    {
+      "sig": "consec_5",
+      "filt": "macd_dir",
+      "sl": 2.5,
+      "tp1": 4,
+      "tp2": 7,
+      "wr": 76.9,
+      "trades": 13,
+      "addedAt": 1777681250550
+    },
+    {
+      "sig": "consec_5",
+      "filt": "macd_dir",
+      "sl": 2,
+      "tp1": 3,
+      "tp2": 5,
+      "wr": 69.2,
+      "trades": 13,
+      "addedAt": 1777681254618
+    },
+    {
+      "sig": "bb_bounce",
+      "filt": "macd_dir",
+      "sl": 2.5,
+      "tp1": 4,
+      "tp2": 7,
+      "wr": 78.6,
+      "trades": 14,
+      "addedAt": 1777738714874
+    }
+  ],
+  "5m": [
+    {
+      "sig": "keltner",
+      "filt": "psar_confirm",
+      "sl": 2,
+      "tp1": 3,
+      "tp2": 5,
+      "wr": 63.2,
+      "trades": 19,
+      "addedAt": 1777682859496
+    }
+  ],
+  "15m": [
+    {
+      "sig": "elder_imp",
+      "filt": "rsi_zone",
+      "sl": 2.5,
+      "tp1": 4,
+      "tp2": 7,
+      "wr": 68.8,
+      "trades": 16,
+      "addedAt": 1777682916983
+    },
+    {
+      "sig": "engulf_vol",
+      "filt": "ema200_align",
+      "sl": 1.5,
+      "tp1": 2.5,
+      "tp2": 4,
+      "wr": 66.7,
+      "trades": 18,
+      "addedAt": 1777757155930
+    },
+    {
+      "sig": "rsi3_pull",
+      "filt": "vol_spike",
+      "sl": 2.5,
+      "tp1": 4,
+      "tp2": 7,
+      "wr": 72.7,
+      "trades": 11,
+      "addedAt": 1777757181745
+    }
+  ],
+  "1h": [
+    {
+      "sig": "cci_cross",
+      "filt": "none",
+      "sl": 2,
+      "tp1": 3,
+      "tp2": 5,
+      "wr": 85.7,
+      "trades": 7,
+      "addedAt": 1777682936862
+    },
+    {
+      "sig": "price_ema20",
+      "filt": "none",
+      "sl": 2,
+      "tp1": 3,
+      "tp2": 5,
+      "wr": 83.3,
+      "trades": 6,
+      "addedAt": 1777682939088
+    },
+    {
+      "sig": "price_ema20",
+      "filt": "rsi_zone",
+      "sl": 2,
+      "tp1": 3,
+      "tp2": 5,
+      "wr": 83.3,
+      "trades": 6,
+      "addedAt": 1777682945719
+    },
+    {
+      "sig": "cci_cross",
+      "filt": "rsi_zone",
+      "sl": 2,
+      "tp1": 3,
+      "tp2": 5,
+      "wr": 83.3,
+      "trades": 6,
+      "addedAt": 1777682958154
+    }
+  ],
+  "4h": [
+    {
+      "sig": "connors_rsi",
+      "filt": "rsi_zone",
+      "sl": 1.5,
+      "tp1": 2.5,
+      "tp2": 4,
+      "wr": 70,
+      "trades": 10,
+      "addedAt": 1777683019518
+    },
+    {
+      "sig": "cci_cross",
+      "filt": "ema200_align",
+      "sl": 1.5,
+      "tp1": 2.5,
+      "tp2": 4,
+      "wr": 66.7,
+      "trades": 6,
+      "addedAt": 1777683047079
+    },
+    {
+      "sig": "cci_cross",
+      "filt": "ema200_align",
+      "sl": 2,
+      "tp1": 3,
+      "tp2": 5,
+      "wr": 60,
+      "trades": 5,
+      "addedAt": 1777683068959
+    }
+  ],
+  "30m": [
+    {
+      "sig": "adx_di",
+      "filt": "macd_dir",
+      "sl": 2.5,
+      "tp1": 4,
+      "tp2": 7,
+      "wr": 60.9,
+      "trades": 23,
+      "addedAt": 1777757126614
+    }
+  ]
+}
