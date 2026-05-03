@@ -1,0 +1,16 @@
+{
+  "system_state": "V2_FORENSIC_SCIENTIST_ACTIVE",
+  "learning_loop": {
+    "input_source": "NeuralPattern_Storage",
+    "activation_threshold": 0.65,
+    "max_patterns": 50,
+    "reinforcement": "Positive_on_Win_Negative_on_Drawdown"
+  },
+  "modus_operandi_matrix": {
+    "Liquidity_Grab": "High_Priority_Reversal",
+    "Stop_Hunt": "Volatility_Warning",
+    "Smart_Money_Accumulation": "Long_Trend_Entry",
+    "Distribution_Whale": "Short_Trend_Entry"
+  },
+  "visualization": "SVG_MiniCharts_Enabled"
+}

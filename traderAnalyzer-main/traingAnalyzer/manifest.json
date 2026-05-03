@@ -1,0 +1,53 @@
+{
+  "manifest_version": 3,
+  "name": "TV Analyzer · Smart Money & Patterns",
+  "version": "2.0.0",
+  "description": "Análisis técnico con Hunter Agent de ballenas BTC, Neural Lab, SMC, patrones armónicos, paper trading.",
+  "permissions": ["activeTab", "tabs", "storage", "scripting", "sidePanel"],
+  "host_permissions": [
+    "https://*.tradingview.com/*",
+    "https://api.binance.com/*",
+    "https://api.coingecko.com/*",
+    "wss://stream.binance.com/*",
+    "https://query1.finance.yahoo.com/*",
+    "https://query2.finance.yahoo.com/*",
+    "https://min-api.cryptocompare.com/*",
+    "https://nfs.faireconomy.media/*",
+    "https://api.hyperliquid.xyz/*",
+    "https://mempool.space/*"
+  ],
+  "action": {},
+  "side_panel": {
+    "default_path": "popup.html"
+  },
+  "content_scripts": [{
+    "matches": ["https://*.tradingview.com/*"],
+    "js": ["content.js"],
+    "run_at": "document_idle"
+  }],
+  "background": { "service_worker": "background.js" },
+  "web_accessible_resources": [{
+    "resources": [
+      "model_weights.json",
+      "neural-config.json",
+      "neural-lab.js",
+      "whale-tracker.js",
+      "popup.js",
+      "domain/entities.js",
+      "domain/ports.js",
+      "application/hunter.agent.js",
+      "application/analysis.service.js",
+      "application/forensic.agent.js",
+      "application/scientist.agent.js",
+      "application/architect.agent.js",
+      "application/whale-tracker.agent.js",
+      "infrastructure/binance.adapter.js",
+      "infrastructure/whale.adapter.js",
+      "infrastructure/blockchain-whale.adapter.js",
+      "infrastructure/indicators.adapter.js",
+      "infrastructure/storage.adapter.js",
+      "infrastructure/hyperliquid.adapter.js"
+    ],
+    "matches": ["<all_urls>"]
+  }]
+}
